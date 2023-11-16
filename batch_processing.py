@@ -96,7 +96,8 @@ def batch_process_documents(
     # This could take some time for larger files
     # Format: projects/{project_id}/locations/{location}/operations/{operation_id}
     try:
-        print(f"Waiting for operation {operation.operation.name} to complete...")
+        #juanan
+        #print(f"Waiting for operation {operation.operation.name} to complete...")
         operation.result(timeout=timeout)
     # Catch exception when operation doesn"t finish before timeout
     except (RetryError, InternalServerError) as e:
@@ -117,8 +118,8 @@ def batch_process_documents(
         raise ValueError(f"Batch Process Failed: {metadata.state_message}")
 
     storage_client = storage.Client()
-
-    print("Output files:")
+    #juanan
+    #print("Output files:")
     # One process per Input Document
     for process in list(metadata.individual_process_statuses):
         # output_gcs_destination format: gs://BUCKET/PREFIX/OPERATION_NUMBER/INPUT_FILE_NUMBER/
@@ -140,13 +141,13 @@ def batch_process_documents(
         for blob in output_blobs:
             # Document AI should only output JSON files to GCS
             if blob.content_type != "application/json":
-                print(
-                    f"Skipping non-supported file: {blob.name} - Mimetype: {blob.content_type}"
-                )
+                #juanan
+                #print(f"Skipping non-supported file: {blob.name} - Mimetype: {blob.content_type}")
                 continue
 
             # Download JSON File as bytes object and convert to Document Object
-            print(f"Fetching {blob.name}")
+            #juanan
+            #print(f"Fetching {blob.name}")
             document = documentai.Document.from_json(
                 blob.download_as_bytes(), ignore_unknown_fields=True
             )
@@ -155,7 +156,8 @@ def batch_process_documents(
             # https://cloud.google.com/python/docs/reference/documentai/latest/google.cloud.documentai_v1.types.Document
 
             # Read the text recognition output from the processor
-            print("The document contains the following text:")
+            #juanan
+            #print("The document contains the following text:")
             print(document.text)
 
 
